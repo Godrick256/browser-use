@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser-Use WebUI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="https://raw.githubusercontent.com/browser-use/browser-use/main/static/browser-use.png" alt="Browser-Use Logo" class="logo">
+                <h1>Browser-Use <span class="version">WebUI</span></h1>
+            </div>
+            <div class="header-actions">
+                <button id="settings-btn" class="icon-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <a href="https://docs.browser-use.com" target="_blank" class="icon-btn" title="Documentation">
+                    <i class="fas fa-book"></i>
+                </a>
+                <a href="https://github.com/browser-use/browser-use" target="_blank" class="icon-btn" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="sidebar">
+                <div class="model-selector">
+                    <h3>Model</h3>
+                    <select id="model-select">
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gpt-4o-mini">GPT-4o Mini</option>
+                        <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                        <option value="deepseek-chat">DeepSeek Chat</option>
+                        <option value="qwen2.5">Qwen 2.5 (Local)</option>
+                    </select>
+                </div>
+
+                <div class="api-key-section">
+                    <h3>API Key</h3>
+                    <div class="api-key-input">
+                        <input type="password" id="api-key" placeholder="Enter your API key">
+                        <button id="save-key" class="small-btn">Save</button>
+                    </div>
+                    <div class="provider-note" id="provider-note">For OpenAI models</div>
+                </div>
+
+                <div class="browser-options">
+                    <h3>Browser Options</h3>
+                    <div class="option">
+                        <input type="checkbox" id="headless-mode">
+                        <label for="headless-mode">Headless Mode</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="disable-security">
+                        <label for="disable-security">Disable Security</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="use-vision" checked>
+                        <label for="use-vision">Use Vision</label>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <h3>History</h3>
+                    <div class="history-list" id="history-list">
+                        <!-- History items will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="task-input-container">
+                    <textarea id="task-input" placeholder="Enter your task here... (e.g., 'Go to google.com and search for browser automation')"></textarea>
+                    <button id="run-task-btn" class="primary-btn">
+                        <i class="fas fa-play"></i> Run Task
+                    </button>
+                </div>
+
+                <div class="browser-preview">
+                    <div class="preview-header">
+                        <h3>Browser Preview</h3>
+                        <div class="preview-controls">
+                            <button id="refresh-btn" class="icon-btn" title="Refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button id="fullscreen-btn" class="icon-btn" title="Fullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="preview-container">
+                        <div id="browser-placeholder" class="browser-placeholder">
+                            <i class="fas fa-globe"></i>
+                            <p>Browser preview will appear here when a task is running</p>
+                        </div>
+                        <iframe id="browser-frame" class="browser-frame" style="display: none;"></iframe>
+                    </div>
+                </div>
+
+                <div class="agent-output">
+                    <div class="output-header">
+                        <h3>Agent Output</h3>
+                        <div class="output-controls">
+                            <button id="copy-output" class="icon-btn" title="Copy Output">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button id="clear-output" class="icon-btn" title="Clear Output">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="output-container" class="output-container">
+                        <div class="welcome-message">
+                            <h3>Welcome to Browser-Use WebUI!</h3>
+                            <p>Enter a task above to get started. The AI agent will control the browser to complete your task.</p>
+                            <div class="example-tasks">
+                                <h4>Example tasks:</h4>
+                                <ul>
+                                    <li><a href="#" class="example-task">Go to Google and search for "browser automation tools"</a></li>
+                                    <li><a href="#" class="example-task">Find the latest news about AI on TechCrunch</a></li>
+                                    <li><a href="#" class="example-task">Compare prices of iPhone 15 on Amazon and Best Buy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button id="close-settings" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3>Advanced Options</h3>
+                        <div class="setting-item">
+                            <label for="max-steps">Maximum Steps:</label>
+                            <input type="number" id="max-steps" min="1" max="100" value="25">
+                        </div>
+                        <div class="setting-item">
+                            <label for="max-actions">Max Actions Per Step:</label>
+                            <input type="number" id="max-actions" min="1" max="20" value="10">
+                        </div>
+                        <div class="setting-item">
+                            <label for="viewport-expansion">Viewport Expansion:</label>
+                            <input type="number" id="viewport-expansion" min="-1" max="1000" value="500">
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Memory Options</h3>
+                        <div class="setting-item">
+                            <input type="checkbox" id="enable-memory" checked>
+                            <label for="enable-memory">Enable Memory</label>
+                        </div>
+                        <div class="setting-item">
+                            <label for="memory-interval">Memory Interval:</label>
+                            <input type="number" id="memory-interval" min="5" max="50" value="10">
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Output Options</h3>
+                        <div class="setting-item">
+                            <input type="checkbox" id="generate-gif">
+                            <label for="generate-gif">Generate GIF</label>
+                        </div>
+                        <div class="setting-item">
+                            <input type="checkbox" id="save-conversation">
+                            <label for="save-conversation">Save Conversation</label>
+                        </div>
+                        <div class="setting-item">
+                            <label for="output-path">Output Path:</label>
+                            <input type="text" id="output-path" value="./output">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-settings" class="primary-btn">Save Settings</button>
+                    <button id="reset-settings" class="secondary-btn">Reset to Defaults</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
